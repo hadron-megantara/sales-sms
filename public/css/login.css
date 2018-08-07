@@ -1,0 +1,19 @@
+.login.container{
+	margin-top:5%;
+}
+
+.login .card-header{
+	font-size: 18px;
+	font-weight: bold;
+	color: #ffffff;
+	background-color: #245580;
+}
+
+.login .logo{
+	width:50%;
+	margin: auto;
+}
+
+body{
+	background-color: #d2d6de;
+}
