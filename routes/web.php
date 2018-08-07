@@ -18,4 +18,7 @@ Route::post('login', 'Web\Auth\LoginController@loginProcess');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', 'Web\HomeController@index')->name('home');
+    Route::get('/config', 'Web\ConfigController@index');
+
+    Route::get('/config/user', 'Web\ConfigController@user');
 });

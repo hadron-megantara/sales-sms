@@ -1,11 +1,9 @@
 @if(isset($user) && $user != null)
-<?php
-    dd($menu);
-?>
+
 <div class="header navbar navbar-inverse">
     <div class="navbar-inner">
-        <div class="header-seperation">
-            <ul class="nav pull-left notifcation-center visible-xs visible-sm">
+        <div class="header-seperation" style="height:75px">
+            <ul class="nav pull-left notifcation-center visible-xs visible-sm" style="display:none">
                 <li class="dropdown">
                     <a href="#main-menu" data-webarch="toggle-left-side">
                         <div class="iconset top-menu-toggle-white"></div>
@@ -102,52 +100,7 @@
             <hr style="margin-top:10px"></hr>
 
             <ul>
-                <li @if(\Request::is('/')) class="active" @endif>
-                   <a href="/">
-                       <i class="fa fa-home"></i>
-                       <span class="title">Dashboard</span>
-                   </a>
-                </li>
-
-                <li class="">
-                    <a href="javascript:;">
-                        <i class="fa fa-cogs"></i>
-                        <span class="title">Setup</span>
-                        @if(\Request::is('config') || \Request::is('config/*'))
-                            <span class="arrow open"></span>
-                        @else
-                            <span class="arrow"></span>
-                        @endif
-                    </a>
-
-                    <ul class="sub-menu" @if(\Request::is('config') || \Request::is('config/*')) style="display: block;" @endif>
-                        <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">User</a></li>
-                        <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">Roles</a></li>
-                        <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">Permissions</a></li>
-                        <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">Menu</a></li>
-                    </ul>
-                </li>
-
-                @for($i=0;$i<count($menu);$i++)
-                    <li class="">
-                        <a href="javascript:;">
-                            <i class="fa fa-cogs"></i>
-                            <span class="title">Setup</span>
-                            @if(\Request::is('config') || \Request::is('config/*'))
-                                <span class="arrow open"></span>
-                            @else
-                                <span class="arrow"></span>
-                            @endif
-                        </a>
-
-                        <ul class="sub-menu" @if(\Request::is('config') || \Request::is('config/*')) style="display: block;" @endif>
-                            <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">User</a></li>
-                            <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">Roles</a></li>
-                            <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">Permissions</a></li>
-                            <li @if(\Request::is('config/info') || \Request::is('config/info/*')) class="active" @endif><a href="/config/info">Menu</a></li>
-                        </ul>
-                    </li>
-                @endfor
+                <?php echo $menu; ?>
             </ul>
         </div>
     </div>

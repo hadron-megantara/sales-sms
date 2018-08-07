@@ -44,7 +44,7 @@ class LoginController extends Controller
         if($request->has('email') && $request->has('password')){
             $user_login = request(['email', 'password']);
 
-            $user = User::where('email', $request->email)->first();
+            $user = User::select('users.*', 's.sales_code', 's.sales_phone', 's.sales_address', 'a.area_name')->join('ms_sales as s', 's.id', '=', 'users._ms_sales')->join('ms_areas as a', 's.sales_area_id', '=', 'a.id')->where('users.email', $request->email)->first();
             if(!$user){
                 return response()->json([
                     'success' => false,
