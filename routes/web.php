@@ -18,7 +18,43 @@ Route::post('login', 'Web\Auth\LoginController@loginProcess');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', 'Web\HomeController@index')->name('home');
-    Route::get('/config', 'Web\ConfigController@index');
 
-    Route::get('/config/user', 'Web\ConfigController@user');
+    Route::group(array('prefix' => 'config'), function(){
+        Route::get('/', 'Web\ConfigController@index');
+        Route::get('user', 'Web\ConfigController@user');
+        Route::get('roles', 'Web\ConfigController@roles');
+        Route::get('permissions', 'Web\ConfigController@permissions');
+        Route::get('menu', 'Web\ConfigController@menu');
+    });
+
+    Route::group(array('prefix' => 'profile'), function(){
+        Route::get('index', 'Web\UserController@index');
+        Route::get('edit', 'Web\UserController@edit');
+        Route::post('update', 'Web\UserController@update');
+    });
+
+    Route::group(array('prefix' => 'outlet'), function(){
+        Route::get('new', 'Web\OutletController@new');
+        Route::get('list', 'Web\OutletController@list');
+
+        Route::get('detail/{id}', 'Web\OutletController@detail');
+        Route::get('detail/{id}/edit', 'Web\OutletController@detailEdit');
+        Route::post('detail/{id}/close', 'Web\OutletController@detailClose');
+    });
+
+    Route::group(array('prefix' => 'rs'), function(){
+        Route::get('new', 'Web\RSController@new');
+        Route::get('list', 'Web\RSController@list');
+
+        Route::get('detail/{id}', 'Web\RSController@detail');
+        Route::get('detail/{id}/edit', 'Web\RSController@detailEdit');
+    });
+
+    Route::group(array('prefix' => 'seller'), function(){
+        Route::get('new', 'Web\SellerController@new');
+        Route::get('list', 'Web\SellerController@list');
+
+        Route::get('detail/{id}', 'Web\SellerController@detail');
+        Route::get('detail/{id}/edit', 'Web\SellerController@detailEdit');
+    });
 });

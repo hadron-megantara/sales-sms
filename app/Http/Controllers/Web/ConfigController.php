@@ -14,4 +14,14 @@ class ConfigController extends Controller
     public function user(Request $request){
         return view('home');
     }
+
+    public function roles(Request $request){
+        return view('home');
+    }
+    public function permissions(Request $request){
+        return view('home');
+    }
+    public function menu(Request $request){
+        return view('home');
+    }
 }

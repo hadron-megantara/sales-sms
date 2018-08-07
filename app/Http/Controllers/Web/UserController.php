@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
 class UserController extends Controller
 {
-    public function level(Request $request){
-        $client = new Client;
-        $response = $client->request('GET', env('IZZI_URL', 'http://izzisystem.local/api/').'user/group',
-            'query' => [],
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-                'Accept'        => 'application/json',
-            ]
-        )
+    public function index(Request $request){
+        
+    }
 
-        $response = json_decode($response->getBody()->getContents());
+    public function edit(Request $request){
+
+    }
+
+    public function destroy(Request $request){
+
     }
 }

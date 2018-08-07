@@ -101,6 +101,7 @@ class Auth2
     }
 
     public function loadMenuData($cookie){
+        Cache::forget('menu');
         $menu = Cache::remember('menu', 60, function () {
             $token = $_COOKIE[env('TOKEN_COOKIE', 'phpsess')];
 
