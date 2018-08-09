@@ -27,20 +27,40 @@ class SimRsController extends Controller
             $orderBy = $request->orderBy;
         }
 
-        $simRS = DB::select('call 	sp_sales_sim_rs_get(?, ?)',[$limit, $limitStart]);
+        $customerId = 0;
+        if($request->has('customerId') && $request->customerId != ''){
+            $customerId = $request->customerId;
+        }
 
-        $res = [
-            'detail' => $simRS,
-            'limit' => $limit,
-            'limitStart' => $limitStart,
-        ];
+        $rsId = 0;
+        if($request->has('rsId') && $request->rsId != ''){
+            $rsId = $request->rsId;
+        }
 
-        return response()->json([
-            'success' => true,
-            'data' => $res,
-            'error' => null,
-            'version' => env('API_VERSION', 'v1')
-        ]);
+        $simRS = DB::select('call sp_sales_sim_rs_get(?, ?, ?, ?)',[$limit, $limitStart, $customerId, $rsId]);
+
+        if($simRS){
+            $res = [
+                'detail' => $simRS,
+                'limit' => $limit,
+                'limitStart' => $limitStart,
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $res,
+                'error' => null,
+                'version' => env('API_VERSION', 'v1')
+            ]);
+        } else{
+            return response()->json([
+                'success' => false,
+                'data' => null,
+                'error' => ['code' => 404, 'message' => 'Data tidak ditemukan. Silahkan coba kembali.'],
+                'version' => env('API_VERSION', 'v1')
+            ]);
+        }
+
     }
 
     public function store(Request $request){

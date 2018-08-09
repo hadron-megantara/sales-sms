@@ -41,20 +41,4 @@ Route::middleware(['auth'])->group(function () {
         Route::get('detail/{id}/edit', 'Web\OutletController@detailEdit');
         Route::post('detail/{id}/close', 'Web\OutletController@detailClose');
     });
-
-    Route::group(array('prefix' => 'rs'), function(){
-        Route::get('new', 'Web\RSController@new');
-        Route::get('list', 'Web\RSController@list');
-
-        Route::get('detail/{id}', 'Web\RSController@detail');
-        Route::get('detail/{id}/edit', 'Web\RSController@detailEdit');
-    });
-
-    Route::group(array('prefix' => 'seller'), function(){
-        Route::get('new', 'Web\SellerController@new');
-        Route::get('list', 'Web\SellerController@list');
-
-        Route::get('detail/{id}', 'Web\SellerController@detail');
-        Route::get('detail/{id}/edit', 'Web\SellerController@detailEdit');
-    });
 });

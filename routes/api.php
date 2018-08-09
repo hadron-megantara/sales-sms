@@ -39,7 +39,5 @@ Route::group(array('prefix' => 'v1'), function(){
         Route::resource('/outlet', 'Api\OutletController');
         Route::resource('/sim-rs', 'Api\SimRsController');
 
-
-
     });
 });
