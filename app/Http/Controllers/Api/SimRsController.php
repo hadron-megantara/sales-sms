@@ -63,6 +63,10 @@ class SimRsController extends Controller
 
     }
 
+    public function show(Request $request, $id){
+
+    }
+
     public function store(Request $request){
         $status = '';
         if($request->has('status')){

@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use Carbon\Carbon;
 use App\MsCustomer;
+use App\MsCustomerPhoto;
 
 class OutletController extends Controller
 {
@@ -53,6 +57,11 @@ class OutletController extends Controller
         ]);
     }
 
+    public function show(Request $request, $id){
+        $outlet = DB::select('call 	sp_sales_outlet_detail_get(?)',[$id]);
+        dd($outlet);
+    }
+
     protected function validator(array $data, $type = 0)
     {
         $messages = [
@@ -68,7 +77,9 @@ class OutletController extends Controller
                 'districtId' => 'required',
                 'companyId' => 'required',
                 'lat' => 'required',
-                'long' => 'required'
+                'long' => 'required',
+                'ktp' => 'required|file',
+                'photo' => 'required|file'
             ], $messages);
         } else{
             return Validator::make($data, [
@@ -108,11 +119,19 @@ class OutletController extends Controller
         $this->validateProcess($request);
 
         $res = $this->storeToDB($request);
+        $outlet = $res['outlet'];
+        $outlet->ktp = url('/').'/app/images/customer/'.$outlet->uuid.'/ktp/'.$res['outletKtp']->path;
+
+        foreach($res['outletPhoto'] as $photo){
+            $photoArray[] = url('/').'/app/images/customer/'.$outlet->uuid.'/outlet/'.$photo->path;
+        }
+
+        $outlet->photo = $photoArray;
 
         if($res){
             return response()->json([
                 'success' => true,
-                'data' => ['detail' => $res],
+                'data' => ['detail' => $outlet],
                 'error' => null,
                 'version' => env('API_VERSION', 'v1')
             ]);
@@ -127,6 +146,10 @@ class OutletController extends Controller
     }
 
     public function storeToDB($request){
+        Carbon::setLocale('Asia/Jakarta');
+
+        $uuid = $this->attributes['uuid'] = Uuid::uuid4()->toString();
+
         $outlet = new MsCustomer;
         $outlet->customer_name = $request->name;
         $outlet->customer_payment_term = $request->paymentTerm;
@@ -136,6 +159,7 @@ class OutletController extends Controller
         $outlet->customer_company_id = $request->companyId;
         $outlet->customer_latitude = $request->lat;
         $outlet->customer_longitude = $request->long;
+        $outlet->uuid = $uuid;
 
         if($request->has('pic')){
             $outlet->customer_pic = $request->pic;
@@ -170,20 +194,57 @@ class OutletController extends Controller
         }
 
         if($request->has('createdBy')){
-            $outlet->created_user = $request->createdBy;
+            $outlet->created_user = $request->pic;
         } else{
             $outlet->created_user = 0;
         }
 
         if($request->has('updatedBy')){
-            $outlet->updated_user = $request->updatedBy;
+            $outlet->updated_user = $request->pic;
         } else{
             $outlet->updated_user = 0;
         }
 
         $outlet->save();
 
-        return $outlet;
+        $currDate = Carbon::now()->toDateTimeString();
+        $fileName = pathinfo($request->ktp->getClientOriginalName(), PATHINFO_FILENAME).'-'.$currDate.'.'.$request->ktp->getClientOriginalExtension();
+        $uploadedFile = $request->file('ktp');
+        $uploadedFile = $uploadedFile->storeAs('images/customer/'.$uuid.'/ktp', $fileName);
+
+        $outletPhoto = new MsCustomerPhoto;
+        $outletPhoto->_ms_customers = $outlet->id;
+        $outletPhoto->path = $fileName;
+        $outletPhoto->type = 1;
+        $outletPhoto->created_by = $request->pic;
+        $outletPhoto->created_at = $currDate;
+        $outletPhoto->updated_by = $request->pic;
+        $outletPhoto->updated_at = $currDate;
+        $outletPhoto->save();
+
+        $outletKtp = $outletPhoto;
+
+        for($i=1;$i<=count($request->outlet);$i++){
+            $fileName = pathinfo($request->outlet[$i]->getClientOriginalName(), PATHINFO_FILENAME).'-'.$currDate.'.'.$request->outlet[$i]->getClientOriginalExtension();
+            $uploadedFile = $request->file('outlet');
+            $uploadedFile = $uploadedFile[$i]->storeAs('images/customer/'.$uuid.'/outlet', $fileName);
+
+            $outletPhoto = new MsCustomerPhoto;
+            $outletPhoto->_ms_customers = $outlet->id;
+            $outletPhoto->path = $fileName;
+            $outletPhoto->type = 2;
+            $outletPhoto->created_by = $request->pic;
+            $outletPhoto->created_at = $currDate;
+            $outletPhoto->updated_by = $request->pic;
+            $outletPhoto->updated_at = $currDate;
+            $outletPhoto->save();
+
+            $outletPhotoArray[] = $outletPhoto;
+        }
+
+        $res = ['outlet' => $outlet, 'outletKtp' => $outletKtp, 'outletPhoto' => $outletPhotoArray];
+
+        return $res;
     }
 
     public function update(Request $request, $id){
