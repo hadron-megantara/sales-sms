@@ -30,6 +30,8 @@ Route::group(array('prefix' => 'v1'), function(){
             Route::get('/district', 'Api\MasterController@getDistrict');
             Route::get('/price-profile', 'Api\MasterController@getPriceProfile');
             Route::get('/warehouse', 'Api\MasterController@getWarehouse');
+            Route::get('/sim-ad', 'Api\MasterController@getSimAd');
+            Route::get('/sim-sd', 'Api\MasterController@getSimSd');
         });
 
         Route::group(array('prefix' => 'user'), function(){
@@ -37,7 +39,7 @@ Route::group(array('prefix' => 'v1'), function(){
         });
 
         Route::resource('/outlet', 'Api\OutletController');
-        Route::post('/outlet-photo', 'Api\OutletController@upload');
+        Route::post('/outlet/{id}', 'Api\OutletController@upload');
 
         Route::resource('/sim-rs', 'Api\SimRsController');
 

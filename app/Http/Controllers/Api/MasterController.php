@@ -9,6 +9,8 @@ use App\MsArea;
 use App\MsCompany;
 use App\MsPriceProfile;
 use App\MsWarehouse;
+use App\MsSimAd;
+use App\MsSimSd;
 
 class MasterController extends Controller
 {
@@ -82,6 +84,38 @@ class MasterController extends Controller
         $res = [
             'detail' => $warehouse,
             'total' => count($warehouse)
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $res,
+            'error' => null,
+            'version' => env('API_VERSION', 'v1')
+        ]);
+    }
+
+    public function getSimAd(){
+        $simAd = MsSimAd::all();
+
+        $res = [
+            'detail' => $simAd,
+            'total' => count($simAd)
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $res,
+            'error' => null,
+            'version' => env('API_VERSION', 'v1')
+        ]);
+    }
+
+    public function getSimSd(){
+        $simSd = MsSimSd::all();
+
+        $res = [
+            'detail' => $simSd,
+            'total' => count($simSd)
         ];
 
         return response()->json([

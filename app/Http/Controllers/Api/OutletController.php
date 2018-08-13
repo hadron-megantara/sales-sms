@@ -290,7 +290,14 @@ class OutletController extends Controller
         $outlet = MsCustomer::where('id', $id)->first();
 
         if($outlet){
-            $res = $this->updateToDB($request, $id);
+            if($this->updateToDB($request, $id)){
+                return response()->json([
+                    'success' => true,
+                    'data' => ['message' => 'Berhasil Mengubah Data Outlet'],
+                    'error' => null,
+                    'version' => env('API_VERSION', 'v1')
+                ]);
+            }
         } else {
             return response()->json([
                 'success' => false,
@@ -301,7 +308,7 @@ class OutletController extends Controller
         }
     }
 
-    public function updateToDB($request, $id){dd($_FILES);
+    public function updateToDB($request, $id){
         Carbon::setLocale('Asia/Jakarta');
 
         $uuid = $this->attributes['uuid'] = Uuid::uuid4()->toString();
@@ -386,15 +393,10 @@ class OutletController extends Controller
 
         $outlet->save();
 
-        return response()->json([
-            'success' => true,
-            'data' => ['message' => 'Berhasil Mengubah Data Outlet'],
-            'error' => null,
-            'version' => env('API_VERSION', 'v1')
-        ]);
+        return $outlet;
     }
 
-    public function upload(Request $request){
+    public function upload(Request $request, $id){
         if($request->has('outletIdDeleted')){
             $deletedId = explode(',', $request->outletIdDeleted);
 
