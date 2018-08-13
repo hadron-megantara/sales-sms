@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Validator;
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\MsCustomer;
 use App\MsSimRs;
 
@@ -156,7 +159,7 @@ class SimRsController extends Controller
     public function update(Request $request, $id){
         Carbon::setLocale('Asia/Jakarta');
 
-        $simRs = MsSimRs::where('id', $id);
+        $simRs = MsSimRs::where('id', $id)->first();
 
         if($request->has('sdId')){
             $simRs->sd_id = $request->sdId;

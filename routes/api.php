@@ -36,6 +36,7 @@ Route::group(array('prefix' => 'v1'), function(){
 
         Route::group(array('prefix' => 'user'), function(){
             Route::get('profile', 'Api\UserController@getProfile');
+            Route::get('profile/photo', 'Api\UserController@photoUpload');
         });
 
         Route::resource('/outlet', 'Api\OutletController');

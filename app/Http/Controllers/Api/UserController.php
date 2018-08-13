@@ -22,6 +22,11 @@ class UserController extends Controller
             'error' => null,
             'version' => env('API_VERSION', 'v1')
         ]);
+    }
 
+    public function photoUpload(request $request){
+        if($request->hasFile('photo')){
+            
+        }
     }
 }
