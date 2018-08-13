@@ -46,6 +46,46 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        $exception = $this->prepareException($exception);
+
+        if ($exception instanceof \Illuminate\Http\Exception\HttpResponseException) {
+            return $exception->getResponse();
+        }
+        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+            return $this->unauthenticated($request, $exception);
+        }
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            return $this->convertValidationExceptionToResponse($exception, $request);
+        }
+
+        $response = [];
+
+        $statusCode = 500;
+        if (method_exists($exception, 'getStatusCode')) {
+            $statusCode = $exception->getStatusCode();
+        }
+
+        switch ($statusCode) {
+            case 404:
+                $msg = 'Not Found';
+                break;
+
+            case 403:
+                $msg = 'Forbidden';
+                break;
+
+            default:
+                $msg = $exception->getMessage();
+                break;
+        }
+
+        return response()->json([
+            'success' => false,
+            'data' => null,
+            'error' => ['code' => $statusCode, 'msg' => $msg],
+            'version' => env('API_VERSION', 'v1')
+        ]);
+
+        // return parent::render($request, $exception);
     }
 }
