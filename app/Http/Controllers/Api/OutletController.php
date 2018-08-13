@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Validator;
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
-use Carbon\Carbon;
 use App\MsCustomer;
 use App\MsCustomerPhoto;
 

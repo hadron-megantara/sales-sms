@@ -11,7 +11,7 @@
 |
 */
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('login', 'Web\Auth\LoginController@login')->name('login');
 Route::post('login', 'Web\Auth\LoginController@loginProcess');
@@ -31,14 +31,5 @@ Route::middleware(['auth'])->group(function () {
         Route::get('index', 'Web\UserController@index');
         Route::get('edit', 'Web\UserController@edit');
         Route::post('update', 'Web\UserController@update');
-    });
-
-    Route::group(array('prefix' => 'outlet'), function(){
-        Route::get('new', 'Web\OutletController@new');
-        Route::get('list', 'Web\OutletController@list');
-
-        Route::get('detail/{id}', 'Web\OutletController@detail');
-        Route::get('detail/{id}/edit', 'Web\OutletController@detailEdit');
-        Route::post('detail/{id}/close', 'Web\OutletController@detailClose');
     });
 });
