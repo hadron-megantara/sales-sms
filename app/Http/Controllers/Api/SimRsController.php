@@ -64,7 +64,7 @@ class SimRsController extends Controller
     }
 
     public function show(Request $request, $id){
-
+        dd($id);
     }
 
     public function store(Request $request){

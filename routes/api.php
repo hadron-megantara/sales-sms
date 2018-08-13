@@ -37,6 +37,8 @@ Route::group(array('prefix' => 'v1'), function(){
         });
 
         Route::resource('/outlet', 'Api\OutletController');
+        Route::post('/outlet-photo', 'Api\OutletController@upload');
+
         Route::resource('/sim-rs', 'Api\SimRsController');
 
     });
